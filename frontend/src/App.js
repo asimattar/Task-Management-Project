@@ -8,7 +8,7 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 
 const App = () => {
   return (
-    <div className='bg-gray-700 text-white h-screen p-1 '>
+    <div className='bg-gray-700 text-white h-screen p-1 relative'>
       <Router>
         <Routes>
           <Route exact path='/' element={<Home/>}>
