@@ -7,6 +7,8 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
   const [description, setDescription] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  
 
   useEffect(() => {
     if (editData) {
@@ -19,14 +21,22 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
       setDescription("");
       setIsEditing(false);
       setEditId(null);
+      setErrorMessage("");
     }
   }, [editData]);
 
 
   const handleSubmit = () => {
+    if (title.trim() === "") {
+      setErrorMessage("Title is required");
+      return; // Prevent form submission
+    }
+    
+    setErrorMessage("");
+
     const taskData = {
-      title:title || editData?.title,
-      description:description || editData?.description,
+      title:title || "",
+      description:description || "",
       completed: editData?.completed || false,
     };
     
@@ -39,6 +49,10 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
           setTasks(prevTasks => 
             prevTasks.map(task => (task.id ===response.data.id ? response.data: task))
           );
+          setEditId(null);
+          setTitle("");
+          setDescription("");
+          setIsEditing(false);
           setInputDiv("hidden");
           refreshTasks();
         })
@@ -53,6 +67,9 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
               console.log("Task added!", response.data);
 
               setTasks(prevTasks => [...prevTasks, response.data]);
+              
+              setTitle("");
+              setDescription("");
               setInputDiv("hidden");
               refreshTasks();
             })
@@ -65,8 +82,8 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
   return (
     <>
       <div
-        className={`${InputDiv} fixed top-0 left-0 bg-gray-800 opacity-50 h-full w-full`}
-      ></div>
+        className={`fixed inset-0 bg-gray-900 bg-opacity-50 ${InputDiv} flex items-center justify-center`}
+        onClick={() => setInputDiv("hidden")}></div>
       <div
         className={`${InputDiv} fixed top-0 left-0 flex items-center justify-center h-full w-full`}
       >
@@ -80,10 +97,14 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
             type="text"
             placeholder="Title"
             name="title"
+            required
             className="px-3 py-2 rounded w-full bg-gray-700 my-3"
             onChange={(e) => setTitle(e.target.value)}
-            value={title} />
-
+            value={title} 
+            />
+            {errorMessage && (
+            <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
+          )}
           <textarea
             name="desc"
             type="text"
@@ -92,8 +113,10 @@ const InputData = ({ InputDiv, setInputDiv,editData,setTasks,refreshTasks }) => 
             onChange={(e) => setDescription(e.target.value)}
             value={description}>  
           </textarea>
-          <button className="px-3 py-2 bg-blue-400 rounded-lg text-black text-xl font-semibold" onClick={handleSubmit}>
-          {editData ? "Update" : "Submit"}
+          <button 
+          className="px-3 py-2 bg-blue-400 rounded-lg text-black text-xl font-semibold" 
+          onClick={handleSubmit}>
+          {isEditing ? "Update" : "Submit"}
           </button>
         </div>
       </div>

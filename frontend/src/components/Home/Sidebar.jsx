@@ -1,6 +1,6 @@
 import React from 'react';
 import { GrNotes } from "react-icons/gr";
-import { MdLabelImportantOutline } from "react-icons/md";
+// import { MdLabelImportantOutline } from "react-icons/md";
 import { FaCheckDouble } from "react-icons/fa6";
 import { TbNotebookOff } from "react-icons/tb";
 import { Link } from 'react-router-dom';
@@ -12,11 +12,11 @@ const Sidebar = () => {
       icon:<GrNotes />,
       link:'/'
     },
-    {
-      title:"Important Tasks",
-      icon:<MdLabelImportantOutline />,
-      link:'/importanttasks'
-    },
+    // {
+    //   title:"Important Tasks",
+    //   icon:<MdLabelImportantOutline />,
+    //   link:'/importanttasks'
+    // },
     {
       title:"Completed Tasks",
       icon:<FaCheckDouble />,

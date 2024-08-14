@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import Cards from "../components/Home/Cards";
 import { MdAddCircle } from "react-icons/md";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import InputData from "../components/Home/InputData";
 
 const AllTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [InputDiv, setInputDiv] = useState("hidden");
   const [editData, setEditData] = useState(null);
-  const { view } = useParams();
+  const [filter, setFilter] = useState("All");
+  // const { view } = useParams();
 
   const refreshTasks = () => {
     axios
@@ -27,20 +28,34 @@ const AllTasks = () => {
     refreshTasks(); 
   }, []);
 
-  const filteredTasks = tasks.filter(task => {
-    if (view === "completedtasks") return task.completed;
-    if (view === "incompletedtasks") return !task.completed;
-    return true; // Show all tasks for the default view
-  });
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
 
+  const filteredTasks = tasks.filter(task => {
+    if (filter === "Completed") return task.completed;
+    if (filter === "Incomplete") return !task.completed;
+    return true; // Show all tasks for "All" filter
+  });
 
   return (
     <>
-      <div>
-        <div className="w-full flex justify-end px-4 py-2">
+      <div className="container mx-auto py-2">
+        <div className="flex justify-between items-center mb-4">
           <button onClick={() => setInputDiv("fixed")}>
             <MdAddCircle className="text-4xl text-gray-400 hover:text-gray-100 transition-all duration-300" />
           </button>
+        </div>
+        <div className="flex justify-between items-center px-4 py-2 border-pink-800">
+          <select
+            value={filter}
+            onChange={handleFilterChange}
+            className="bg-gray-700 text-white px-3 py-2 rounded"
+          >
+            <option value="All">All</option>
+            <option value="Completed">Completed</option>
+            <option value="Incomplete">Incomplete</option>
+          </select>
         </div>
         <Cards
           home={"true"}
@@ -48,6 +63,7 @@ const AllTasks = () => {
           setEditData={setEditData}
           setTasks={setTasks}
           refreshTasks={refreshTasks}
+          // tasks={tasks}
           tasks={filteredTasks}
         />
       </div>

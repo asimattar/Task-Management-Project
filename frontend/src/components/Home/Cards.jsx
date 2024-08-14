@@ -17,7 +17,7 @@ const Cards = ({ home, setInputDiv, setEditData, tasks = [], setTasks }) => {
       .then(() => {
         console.log("Task deleted!");
 
-        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Remove task from state
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); 
       })
       .catch((error) =>
         console.error("There was an error deleting the task!", error)
@@ -40,13 +40,10 @@ const Cards = ({ home, setInputDiv, setEditData, tasks = [], setTasks }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {tasks.length > 0 ? (
       tasks.map((items) => (
-        <div
-          key={items.id}
-          className=" flex flex-col justify-between bg-gray-600 rounded p-4"
-        >
+        <div key={items.id} className=" flex flex-col justify-between bg-gray-600 rounded p-4">
           <div>
             <h3 className="text-xl font-semibold">{items.title}</h3>
             <p className="text-gray-300 my-2">{items.description}</p>
