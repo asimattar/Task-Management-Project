@@ -6,4 +6,4 @@ from .models import Task
 
 class TaskView(viewsets.ModelViewSet):
     queryset=Task.objects.all()
-    serializer_class=TaskSerializer
+    serializer_class=TaskSerializer 
